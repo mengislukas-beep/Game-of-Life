@@ -111,7 +111,10 @@ void Board::setBoard(int x, int y) {
     board[y * width + x] = true;
     setColor(x, y, sf::Color::Black);
 }
-
+void Board::detBoard(int x, int y) {
+    board[y * width + x] = false;
+    setColor(x, y, sf::Color::White);
+}
 void Board::allWhite() {
     for (int y = 0; y < height; y++) {
         for (int x = 0; x < width; x++) {

@@ -13,7 +13,7 @@ int main() {
     int lx = 1000;
     int ly = 1000;
 
-    float cellSize = 10.f;
+    float cellSize = 30.f;
 
     int width = lx / cellSize;
     int height = ly / cellSize;
@@ -24,6 +24,7 @@ int main() {
     sf::Clock clock;
     float dt = 100.f;
     float p = 0.001;
+    bool det = false;
 
     while (window.isOpen())
     {
@@ -48,6 +49,16 @@ int main() {
                 event.mouseButton.button == sf::Mouse::Left)
             {
                 paint = false;
+
+            }if (event.type == sf::Event::MouseButtonPressed &&
+                event.mouseButton.button == sf::Mouse::Right)
+            {
+                det = true;
+            }
+            if (event.type == sf::Event::MouseButtonReleased &&
+                event.mouseButton.button == sf::Mouse::Right)
+            {
+                det = false;
             }
             if (event.type == sf::Event::KeyPressed &&
                 event.key.code == sf::Keyboard::W)
@@ -68,7 +79,7 @@ int main() {
             }
             if (event.type == sf::Event::KeyPressed &&
                 event.key.code == sf::Keyboard::Escape)
-            {
+           {
                board.allWhite();
                running = false; 
             }
@@ -123,9 +134,16 @@ int main() {
             board.setBoard(mouse.x / cellSize, mouse.y / cellSize);
         }
 
+        if (det && mouse.x >= 0 && mouse.x < lx &&
+            mouse.y >= 0 && mouse.y < ly)
+        {
+            board.detBoard(mouse.x / cellSize, mouse.y / cellSize);
+        }
+
         if (running && clock.getElapsedTime().asMilliseconds() >= dt)
         {
-            board.update_random(p); //board.update();
+            // board.update_random(p);
+            board.update();
             clock.restart();
         }
 

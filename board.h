@@ -24,6 +24,7 @@ public:
     void draw(sf::RenderWindow& window);
     void setColor(int x, int y, sf::Color color);
     void setBoard(int x, int y);
+    void detBoard(int x, int y);
     void allWhite();
     void setPatter(const std::vector<std::vector<bool>>& pattern);
     void save(int index);
