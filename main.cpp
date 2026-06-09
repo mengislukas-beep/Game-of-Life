@@ -1,6 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/System/Vector2.hpp>
 #include "board.h"
+#include <iostream>
 
 
 int main() {
@@ -22,6 +23,7 @@ int main() {
     bool paint = false;
     sf::Clock clock;
     float dt = 100.f;
+    float p = 0.001;
 
     while (window.isOpen())
     {
@@ -51,11 +53,13 @@ int main() {
                 event.key.code == sf::Keyboard::W)
             {
                 dt *= 0.9f;
+                std::cout << "ms: " << dt << " probability: " << p*100 << "%" <<std::endl;
             }
             if (event.type == sf::Event::KeyPressed &&
                 event.key.code == sf::Keyboard::S)
             {
                 dt *= 1.1f;
+                std::cout << "ms: " << dt << " probability: " << p*100 << "%" <<std::endl;
             }
             if (event.type == sf::Event::KeyPressed &&
                 event.key.code == sf::Keyboard::R)
@@ -68,6 +72,47 @@ int main() {
                board.allWhite();
                running = false; 
             }
+            if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::S)
+            {
+                board.setSaving();
+            }
+            if (board.isSaving() && event.type == sf::Event::KeyPressed) 
+            {
+                int index = -1;
+                if (event.key.code >= sf::Keyboard::Num0 &&
+                    event.key.code <= sf::Keyboard::Num9)
+                {
+                    index = event.key.code - sf::Keyboard::Num0;
+                }
+                if (index != -1)
+                {
+                    board.save(index);
+                    board.resetSaving();
+                }
+            }
+            if (!board.isSaving() && event.type == sf::Event::KeyPressed)
+            {
+                int index = -1;
+                if (event.key.code >= sf::Keyboard::Num0 &&
+                    event.key.code <= sf::Keyboard::Num9)
+                {
+                    index = event.key.code - sf::Keyboard::Num0;
+                }
+                if (index != -1)
+                {
+                    board.load(index);
+                }
+            }
+            if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::P) {
+                p *= 2.f;
+                std::cout << "ms: " << dt << " probability: " << p*100 << "%" <<std::endl;
+            }
+            if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::O) {
+                p /= 2.f;
+                std::cout << "ms: " << dt << " probability: " << p*100 << "%" <<std::endl;
+
+            }
+            
 
         }
         sf::Vector2i mouse = sf::Mouse::getPosition(window);
@@ -80,7 +125,7 @@ int main() {
 
         if (running && clock.getElapsedTime().asMilliseconds() >= dt)
         {
-            board.update();
+            board.update_random(p); //board.update();
             clock.restart();
         }
 

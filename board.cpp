@@ -1,12 +1,15 @@
 #include "board.h"
 #include <SFML/Graphics.hpp>
+#include <random>
 
 Board::Board(int width, int height, float cellSize)
     : board(width * height, false),
       width(width),
       height(height),
       cellSize(cellSize),
-      m_vertices(sf::Quads, width * height * 4)
+      m_vertices(sf::Quads, width * height * 4),
+      saves(10, std::vector<bool>(width * height, false)),
+      saving(false)      
 {
     for (int y = 0; y < height; y++)
     {
@@ -16,6 +19,7 @@ Board::Board(int width, int height, float cellSize)
 
             float px = x * cellSize;
             float py = y * cellSize;
+
 
             m_vertices[i + 0].position = {px, py};
             m_vertices[i + 1].position = {px + cellSize, py};
@@ -126,3 +130,36 @@ void Board::setPatter(const std::vector<std::vector<bool>>& pattern) {
         }
     }
 }
+
+void Board::save(int index) {
+    saves[index] = board;
+}
+
+void Board::load(int index) {
+    board = saves[index];
+}
+
+void Board::randomize() 
+{
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dis(false, true);
+
+    for (int i = 0; i < width * height; i++)
+        board[i] = dis(gen);
+}
+void Board::little_random(float p) {
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::bernoulli_distribution dis(p);
+
+    for (int i = 0; i < width * height; i++)
+        if (dis(gen)) board[i] = !board[i];
+}
+
+void Board::update_random(float p) {
+    update();
+    little_random(p);
+}
+
+
