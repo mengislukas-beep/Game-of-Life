@@ -1,8 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/System/Vector2.hpp>
 #include "board.h"
-#include <chrono>
-#include <thread>
+
 
 int main() {
     sf::RenderWindow window(
