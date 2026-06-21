@@ -13,7 +13,7 @@ int main() {
     int lx = 1000;
     int ly = 1000;
 
-    float cellSize = 30.f;
+    float cellSize = 200.f;
 
     int width = lx / cellSize;
     int height = ly / cellSize;
@@ -142,7 +142,7 @@ int main() {
 
         if (running && clock.getElapsedTime().asMilliseconds() >= dt)
         {
-            // board.update_random(p);
+            //board.update_random(p);
             board.update();
             clock.restart();
         }
